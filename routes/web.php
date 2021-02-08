@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,9 +22,9 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::prefix('restricted-zone')->middleware('auth')->group(function(){
-    Route::get('hello', 'TestController@logged');
+    Route::get('/', 'TestController@logged');
 });
 
 Route::prefix('free-zone')->group(function(){
-    Route::get('hello', 'TestController@guest');
+    Route::get('/', 'TestController@guest');
 });

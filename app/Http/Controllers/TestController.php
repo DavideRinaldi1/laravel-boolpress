@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TestController extends Controller
 {
     public function guest(){
-        return redirect('auth.login');
+        $message = 'Ciao utente!';
+        return view('hello', compact('message'));
     }
     
     public function logged(){
         $user = Auth::user();
-        return view('auth.hello', compact('user'));
+        $message = 'Ciao ' . $user->name;
+        return view('hello', compact('message'));
 
     }
     /**
