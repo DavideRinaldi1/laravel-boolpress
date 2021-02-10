@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'PostController@index');
 
 Auth::routes();
 
@@ -28,3 +26,5 @@ Route::prefix('restricted-zone')->middleware('auth')->group(function(){
 Route::prefix('free-zone')->group(function(){
     Route::get('/', 'TestController@guest');
 });
+
+Route::resource('posts', 'PostController');
