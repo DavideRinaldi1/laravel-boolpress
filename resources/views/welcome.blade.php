@@ -11,6 +11,7 @@
                 <th scope="col">Categoria</th>
                 <th scope="col">Autore</th>
                 <th scope="col">Descrizione</th>
+                <th scope="col">Azioni</th>
             </tr>
         </thead>
         <tbody>
@@ -21,9 +22,14 @@
                 <td>{{$post->author}}</td>
                 <td>{{$post->postInfo->description}}</td>
                 <td>
-                    <a class="btn btn-outline-success" href="/posts/{{$post->id}}" role="button">Dettagli</a>
-                    <a class="btn btn-outline-secondary" href="\posts\{{$post->id}}\edit" role="button">Modifica</a>
-                    <a class="btn btn btn-outline-danger" href="{{--route(posts.destroy)--}}" role="button">Elimina</a>
+                    <a class="btn btn-outline-success" href="{{route('posts.show', $post->id)}}" role="button">Dettagli</a>
+                    <a class="btn btn-outline-secondary" href="{{route('posts.edit', $post->id)}}" role="button">Modifica</a>
+                    <form action="{{route('posts.destroy' , $post->id)}}" 
+                    method="POST" style="display: inline">
+                    @csrf
+                    @method('DELETE')
+                        <button type="submit" class="btn btn-outline-danger">Elimina</button>
+                    </form>
                 </td>
             </tr>
             @endforeach

@@ -7,6 +7,7 @@ use App\PostInfo;
 use App\Category;
 use App\Tag;
 Use App\User;
+use App\Policies\PostPolicy;
 
 class Post extends Model
 {

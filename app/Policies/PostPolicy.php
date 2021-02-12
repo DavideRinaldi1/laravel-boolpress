@@ -37,11 +37,11 @@ class PostPolicy
      * Determine whether the user can create models.
      *
      * @param  \App\User  $user
-     * @return mixed
+     * @return bool
      */
     public function create(User $user)
     {
-        //
+        return Auth::check() === true;
     }
 
     /**

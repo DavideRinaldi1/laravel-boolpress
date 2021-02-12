@@ -20,7 +20,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::paginate(10);
-        $info = $posts[0]->postInfo;
+        //$info = $posts[0]->postInfo;
         return view('welcome', compact('posts'));
     }
 
@@ -33,7 +33,11 @@ class PostController extends Controller
     {
         $categories = Category::all();
         $tags = Tag::all();
-        return view('create', compact('categories', 'tags'));
+        if(Auth::check()){
+            return view('create', compact('categories', 'tags'));
+        }else{
+            return view('notPermission');
+        }
     }
 
     /**
@@ -82,9 +86,16 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
+    {   
+        $categories = Category::all();
+        $tags = Tag::all();
         $post = Post::find($id);
-        return view('edit', compact('post'));
+        $postInfo = PostInfo::find($id);
+        if(Auth::check()){
+            return view('edit', compact('post', 'tags', 'categories', 'postInfo'));
+        }else{
+            return view('notPermission');
+        }
     }
 
     /**
@@ -101,11 +112,15 @@ class PostController extends Controller
         $oldPost = Post::find($id);
         $oldPost->title = $validated['title'];
         $oldPost->author = $validated['author'];
+        $oldPost->category_id = $validated['category_id'];
         $oldPost->save();
 
+        $oldPostInfo = $oldPost->postInfo;
+        $oldPostInfo->description = $validated['description'];
+        $oldPostInfo->slug = $validated['slug'];
+        $oldPostInfo->save();
 
-
-        return view('editPostSuccess');
+        return redirect(route('posts.index'));
     }
 
     /**
@@ -116,6 +131,16 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(Auth::check()){
+            $posts = Post::find($id);
+            //$posts->tags()->touch();
+            $posts->category->touch();
+            $posts->postInfo->delete();
+            $posts->delete();
+    
+            return redirect(route('posts.index'));
+        }else{
+            return view('notPermission');
+        }
     }
 }
